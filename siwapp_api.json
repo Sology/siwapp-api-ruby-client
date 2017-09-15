@@ -1,0 +1,254 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Siwapp API Client",
+        "description": "Access Siwapp data via API.",
+        "version": "1.0.0"
+    },
+    "host": "ENTER YOUR HOST HERE",
+    "schemes": [
+        "https"
+    ],
+    "basePath": "/api/v1",
+    "produces": [
+        "application/json"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "securityDefinitions": {
+        "Token": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "paths": {
+        "/invoices": {
+            "post": {
+                "security": [
+                    {
+                        "Token": []
+                    }
+                ],
+                "description": "Creating invoice.",
+                "operationId": "create_invoice",
+                "parameters": [
+                    {
+                        "name": "invoice",
+                        "description": "Invoice.",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Invoice"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/Invoice"
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
+        "/invoices/print_template/{template_id}/invoice/{id}?format=pdf": {
+            "get": {
+                "security": [
+                    {
+                        "Token": []
+                    }
+                ],
+                "description": "Get invoice in pdf file.",
+                "operationId": "get_invoice_pdf",
+                "parameters": [
+                    {
+                        "name": "template_id",
+                        "in": "path",
+                        "description": "ID of print template",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of invoice",
+                        "required": true,
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "403": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Invoice": {
+            "type": "object",
+            "description": "Invoice wrapper.",
+            "properties": {
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "attributes": {
+                            "type": "object",
+                            "required": [
+                                "name",
+                                "series_id"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "description": "Customer's (company) name."
+                                },
+                                "invoicing_address": {
+                                    "type": "string",
+                                    "description": "Customer's (company) invoicing address."
+                                },
+                                "issue_date": {
+                                    "type": "string",
+                                    "description": "Invoice's issue date. Eg '2017-08-08'"
+                                },
+                                "series_id": {
+                                    "type": "integer",
+                                    "description": "Series ID for numbering invoices (has to be set in Siwapp first)."
+                                },
+                                "currency": {
+                                    "type": "string",
+                                    "description": "Eg 'gbp'"
+                                },
+                                "status": {
+                                    "type": "string",
+                                    "description": "Inoice status."
+                                }
+                            }
+                        },
+                        "meta": {
+                            "type": "object",
+                            "properties": {
+                                "issued_by": {
+                                    "type": "string",
+                                    "description": "Who issued an invoice possibly with an email address."
+                                }
+                            }
+                        },
+                        "relationships": {
+                            "type": "object",
+                            "properties": {
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/InvoiceItem"
+                                            }
+                                        }
+                                    }
+                                },
+                                "payments": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/InvoicePayment"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "InvoiceItem": {
+            "type": "object",
+            "description": "InvoiceItem wrapper.",
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "required": [
+                        "tax_ids"
+                    ],
+                    "properties": {
+                        "description": {
+                            "type": "string",
+                            "description": "Items' description."
+                        },
+                        "quantity": {
+                            "type": "integer",
+                            "description": "Items' quantity."
+                        },
+                        "discount": {
+                            "type": "integer",
+                            "description": "Items' discount (eg 22 equals 22% discount)."
+                        },
+                        "tax_ids": {
+                            "type": "array",
+                            "description": "Array of tax ids (have to be already defined in Siwapp).",
+                            "items": {
+                                "type": "integer"
+                            }
+                        },
+                        "unitary_cost": {
+                            "type": "number",
+                            "format": "double",
+                            "description": "Items' unitary cost."
+                        }
+                    }
+                }
+            }
+        },
+        "InvoicePayment": {
+            "type": "object",
+            "description": "InvoiceItem wrapper.",
+            "properties": {
+                "attributes": {
+                    "type": "object",
+                    "properties": {
+                        "notes": {
+                            "type": "string",
+                            "description": "Payment's notes."
+                        },
+                        "amount": {
+                            "type": "number",
+                            "format": "double",
+                            "description": "Payment's amount."
+                        },
+                        "date": {
+                            "type": "string",
+                            "description": "Payment's date eg '2017-02-03'."
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

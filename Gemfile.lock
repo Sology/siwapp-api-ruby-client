@@ -1,0 +1,20 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    httparty (0.15.6)
+      multi_xml (>= 0.5.2)
+    multi_xml (0.6.0)
+    rubyzip (1.2.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  httparty (= 0.15.6)
+  rubyzip (= 1.2.1)
+
+RUBY VERSION
+   ruby 2.2.1p85
+
+BUNDLED WITH
+   1.15.4
