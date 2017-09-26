@@ -1,7 +1,10 @@
 require 'zip'
 require 'httparty'
 
-gemname = "siwapp-client"
+gemName = "siwapp-client"
+gemHomepage = "http://www.sology.eu/"
+gemAuthor = "Sology"
+gemAuthorEmail = "wojtek@sology.eu"
 
 spec = File.open("./siwapp_api.json", "rb")
 
@@ -13,7 +16,12 @@ codegen_response = HTTParty.post(
    'Accept' => 'application/json'
   },
   body: {
-    options: { "gemName" => gemname },
+    options: {
+      "gemName" => gemName,
+      "gemHomepage" => gemHomepage,
+      "gemAuthor" => gemAuthor,
+      "gemAuthorEmail" => gemAuthorEmail
+      },
     spec: JSON.parse(spec.read)
   }.to_json
 )
