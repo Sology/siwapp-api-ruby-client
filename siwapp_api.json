@@ -3,7 +3,7 @@
     "info": {
         "title": "Siwapp API Client",
         "description": "Access Siwapp data via API.",
-        "version": "1.0.0"
+        "version": "1.0.1"
     },
     "host": "siwapp.ifni.sology.eu",
     "schemes": [
