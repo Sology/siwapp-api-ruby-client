@@ -5,7 +5,7 @@
         "description": "Access Siwapp data via API.",
         "version": "1.0.0"
     },
-    "host": "ENTER YOUR HOST HERE",
+    "host": "siwapp.ifni.sology.eu",
     "schemes": [
         "https"
     ],
@@ -92,7 +92,10 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "file"
+                        }
                     },
                     "403": {
                         "description": "Unauthorized"
@@ -115,6 +118,10 @@
                 "data": {
                     "type": "object",
                     "properties": {
+                        "id": {
+                            "type": "integer",
+                            "description": "Invoice ID."
+                        },
                         "attributes": {
                             "type": "object",
                             "required": [
